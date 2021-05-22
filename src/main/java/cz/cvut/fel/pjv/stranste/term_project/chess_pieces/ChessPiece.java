@@ -7,10 +7,11 @@ import cz.cvut.fel.pjv.stranste.term_project.board.Tile;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ChessPiece implements Serializable {
 
-    public Tile tile;
+    protected Tile tile;
     protected abstract void loadImg();
 
     /**
@@ -21,7 +22,7 @@ public abstract class ChessPiece implements Serializable {
     /**
      * Returns all moves possible by this piece in given chess board.
      */
-    public abstract ArrayList<Move> getMoves(Board board);
+    public abstract List<Move> getMoves(Board board);
 
     /**
      * Returns

@@ -1,5 +1,6 @@
 package cz.cvut.fel.pjv.stranste.term_project.controllers;
 
+import com.sun.tools.javac.Main;
 import cz.cvut.fel.pjv.stranste.term_project.board.Board;
 import cz.cvut.fel.pjv.stranste.term_project.board.Coord;
 import cz.cvut.fel.pjv.stranste.term_project.board.Move;
@@ -18,16 +19,16 @@ import java.util.logging.Logger;
 public class MainWindowController {
 
     private enum GameState {
-        Normal,
-        Mate,
-        Stalemate
+        NORMAL,
+        MATE,
+        STALEMATE
     }
 
     private enum GameMode {
-        Editor,
-        Bot,
-        Local,
-        Lan
+        EDITOR,
+        BOT,
+        LOCAL,
+        LAN
     }
 
     private static final Logger LOG = Logger.getLogger(MainWindowController.class.getName());
@@ -39,8 +40,15 @@ public class MainWindowController {
     private GameMode gameMode;
     private boolean runClock;
 
-    public MainWindowController(Board board) {
-        this.board = board;
+    private static MainWindowController instance = new MainWindowController();
+
+    public static MainWindowController getInstance(Board board)
+    {
+        instance.board = board;
+        return instance;
+    }
+
+    private MainWindowController() {
         moves = new ArrayList<>();
     }
 
@@ -67,7 +75,7 @@ public class MainWindowController {
         board.setDefaultBoard();
         view.init();
         drawBoard();
-        gameMode = GameMode.Editor;
+        gameMode = GameMode.EDITOR;
     }
 
     private void drawBoard() {
@@ -108,7 +116,7 @@ public class MainWindowController {
         }
         Promotion promotion = new Promotion(move.end, returnValue, move.white);
         promote(promotion);
-        if (gameMode == GameMode.Lan && board.localWhite == board.whiteOnMove) netController.sendPromotion(promotion);
+        if (gameMode == GameMode.LAN && board.localWhite == board.whiteOnMove) netController.sendPromotion(promotion);
     }
 
     /**
@@ -136,11 +144,12 @@ public class MainWindowController {
 
     /**
      * Plays a given move.
+     * @param move move to be played
      */
     public void playMove(Move move) {
         board.movePiece(move);
         if ((move.white ? move.end.secondCoord() == '8' : move.end.secondCoord() == '1') && board.getTile(move.end).getPiece() instanceof Pawn) {
-            if (gameMode == GameMode.Lan) {
+            if (gameMode == GameMode.LAN) {
                 if (board.localWhite == board.whiteOnMove) {
                     promoteUi(move);
                 }
@@ -169,10 +178,10 @@ public class MainWindowController {
      */
     public void tileClicked(Coord coord) {
         boolean moved = false;
-        if (gameMode == GameMode.Local || gameMode == GameMode.Editor || board.whiteOnMove == board.localWhite) {
+        if (gameMode == GameMode.LOCAL || gameMode == GameMode.EDITOR || board.whiteOnMove == board.localWhite) {
             for (Move move : moves) {
                 if (move.end.equals(coord)) {
-                    if (gameMode == GameMode.Lan) netController.sendMove(move);
+                    if (gameMode == GameMode.LAN) netController.sendMove(move);
                     playMove(move);
                     moved = true;
                     moves = new ArrayList<>();
@@ -180,14 +189,14 @@ public class MainWindowController {
                 }
             }
             if (board.getTile(coord).getPiece() != null && !moved) {
-                if (board.getTile(coord).getPiece().white == board.whiteOnMove || gameMode == GameMode.Editor) {
+                if (board.getTile(coord).getPiece().white == board.whiteOnMove || gameMode == GameMode.EDITOR) {
                     view.chessBoard.rePaintBoard();
-                    moves = board.getTile(coord).getPiece().getMoves(board);
+                    moves = (ArrayList<Move>) board.getTile(coord).getPiece().getMoves(board);
                     drawMoves(moves);
                 }
             }
         }
-        if (gameMode == GameMode.Bot && board.whiteOnMove != board.localWhite) {
+        if (gameMode == GameMode.BOT && board.whiteOnMove != board.localWhite) {
             botMove();
         }
     }
@@ -293,16 +302,16 @@ public class MainWindowController {
             }
         }
 
-        gameState = GameState.Stalemate;
+        gameState = GameState.STALEMATE;
         if (board.kingInCheckMate()) {
-            gameState = GameState.Mate;
+            gameState = GameState.MATE;
         }
         stopGame();
         switch (gameState) {
-            case Mate:
+            case MATE:
                 JOptionPane.showMessageDialog(view, (board.whiteOnMove ? "Black" : "White") + " won! (checkmate)", "Game end", JOptionPane.PLAIN_MESSAGE);
                 break;
-            case Stalemate:
+            case STALEMATE:
                 JOptionPane.showMessageDialog(view, "It is a draw! (stalemate)", "Game end", JOptionPane.PLAIN_MESSAGE);
                 break;
         }
@@ -370,7 +379,7 @@ public class MainWindowController {
             startChessClock(dialog.time, dialog.increment);
             board.localWhite = dialog.whiteLocal;
             board.whiteOnMove = dialog.whiteStarts;
-            gameMode = GameMode.Bot;
+            gameMode = GameMode.BOT;
             if (board.localWhite != board.whiteOnMove) {
                 botMove();
             }
@@ -388,7 +397,7 @@ public class MainWindowController {
             startChessClock(dialog.time, dialog.increment);
             board.localWhite = dialog.whiteLocal;
             board.whiteOnMove = dialog.whiteStarts;
-            gameMode = GameMode.Local;
+            gameMode = GameMode.LOCAL;
             checkForEnd();
         }
     }
@@ -404,7 +413,7 @@ public class MainWindowController {
             board.blackTime = board.whiteTime = dialog.time;
             board.localWhite = dialog.whiteLocal;
             board.whiteOnMove = dialog.whiteStarts;
-            gameMode = GameMode.Lan;
+            gameMode = GameMode.LAN;
             checkForEnd();
 
             netController = new NetworkController(view, this, board);
@@ -429,11 +438,11 @@ public class MainWindowController {
         stopGame();
         Dialog dialog = Dialog.showJoinDialog(view);
         if (dialog != null) {
-            gameMode = GameMode.Lan;
+            gameMode = GameMode.LAN;
             netController = new NetworkController(view, this, board);
             netController.startClient(dialog.address, dialog.port);
         }
-        gameMode = GameMode.Lan;
+        gameMode = GameMode.LAN;
     }
 
     /**
@@ -442,7 +451,7 @@ public class MainWindowController {
      */
     public void stopGame() {
         runClock = false;
-        gameMode = GameMode.Editor;
+        gameMode = GameMode.EDITOR;
         board.clockIncrement = 0;
         board.whiteTime = 0;
         board.blackTime = 0;

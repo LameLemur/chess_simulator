@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Bishop extends ChessPiece {
 
@@ -24,8 +26,8 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
-    public ArrayList<Move> getMoves(Board board) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+    public List<Move> getMoves(Board board) {
+        List<Move> moves = new ArrayList<Move>();
         int[][] steps = new int[][]{{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}};
         int[] coefficients = new int[]{-1, 1};
         for (int coefficient1 : coefficients) {
@@ -57,15 +59,14 @@ public class Bishop extends ChessPiece {
                 i--;
             }
         }
-
         return moves;
     }
 
     @Override
     protected void loadImg() {
         try {
-            whiteImg = ImageIO.read(new File("assets/white_bishop.png"));
-            blackImg = ImageIO.read(new File("assets/black_bishop.png"));
+            whiteImg = ImageIO.read(this.getClass().getResource("/assets/white_bishop.png"));
+            blackImg = ImageIO.read(this.getClass().getResource("/assets/black_bishop.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

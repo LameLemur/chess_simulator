@@ -35,6 +35,7 @@ public class NetworkController {
 
     /**
      * Creates a new thread that listens for a connection on given port.
+     * @param port server port
      */
     public void startServer(int port) {
 
@@ -68,6 +69,8 @@ public class NetworkController {
 
     /**
      * Creates a new thread that connects to a given address and port.
+     * @param host server address
+     * @param port server port
      */
     public void startClient(String host, int port) {
 

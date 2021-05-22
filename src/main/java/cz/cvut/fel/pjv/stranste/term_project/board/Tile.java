@@ -10,6 +10,8 @@ public class Tile implements Serializable {
 
     /**
      * A class that hold a chess piece and has a coordinate.
+     * @param chessPiece chess piece to be held
+     * @param coord possiotion on board
      */
     public Tile(ChessPiece chessPiece, Coord coord) {
         this.coord = coord;
@@ -18,6 +20,7 @@ public class Tile implements Serializable {
 
     /**
      * Sets a given chess piece to this tile.
+     * @param piece chess piece to be held
      */
     public void setPiece(ChessPiece piece) {
         this.piece = piece;
@@ -27,7 +30,7 @@ public class Tile implements Serializable {
     }
 
     /**
-     * Returns the chess piece this tile holds.
+     * @return the chess piece this tile holds, return null if empty.
      */
     public ChessPiece getPiece() {
         return piece;

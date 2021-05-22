@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class MainWindowView extends JFrame {
 
@@ -27,8 +28,11 @@ public class MainWindowView extends JFrame {
     private final MainWindowController controller;
     private JMenuBar menuBar;
 
+    private static final Logger LOG = Logger.getLogger(MainWindowController.class.getName());
+
     /**
      * Creates a new view which is a child of a JFrame.
+     * @param controller windows controller
      */
     public MainWindowView(MainWindowController controller) {
         super("Chess");
@@ -156,6 +160,7 @@ public class MainWindowView extends JFrame {
 
         /**
          * Sets the time for white.
+         * @param seconds time
          */
         public void setWhiteTime(int seconds) {
             whiteTime.setText((seconds / 60) + ":" + (((seconds % 60) >= 10) ? String.valueOf(seconds % 60) : "0" + seconds % 60));
@@ -163,6 +168,7 @@ public class MainWindowView extends JFrame {
 
         /**
          * Sets the time for black.
+         * @param seconds time
          */
         public void setBlackTime(int seconds) {
             blackTime.setText((seconds / 60) + ":" + (((seconds % 60) >= 10) ? String.valueOf(seconds % 60) : "0" + seconds % 60));
@@ -222,17 +228,20 @@ public class MainWindowView extends JFrame {
 
         /**
          * Draws a BufferedImage to specifics tile determined by the given coordinate.
+         * @param coord tile
+         * @param img piece asset
          */
         public void drawPiece(BufferedImage img, Coord coord) {
             try {
                 tiles[coord.firstIndex()][coord.secondIndex()].setIcon(new ImageIcon(resizeImage(img, 84, 84)));
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.info("Chess piece image resizing error");
             }
         }
 
         /**
          * Draws a red background to specifics tile determined by the given coordinate.
+         * @param coord tile
          */
         public void paintRed(Coord coord) {
             tiles[coord.firstIndex()][coord.secondIndex()].setBackground(Color.RED);
@@ -240,6 +249,7 @@ public class MainWindowView extends JFrame {
 
         /**
          * Draws a green background to specifics tile determined by the given coordinate.
+         * @param coord tile
          */
         public void paintGreen(Coord coord) {
             tiles[coord.firstIndex()][coord.secondIndex()].setBackground(Color.GREEN);

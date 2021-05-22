@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class King extends ChessPiece {
 
@@ -28,8 +30,8 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public ArrayList<Move> getMoves(Board board) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+    public List<Move> getMoves(Board board) {
+        List<Move> moves = new ArrayList<Move>();
         int[][] steps = new int[][]{{1, 0}, {1, 1}, {0, 1}, {1, -1}, {-1, 1}, {-1, 0}, {0, -1}, {-1, -1}};
         for (int[] step : steps) {
             int firstIndex = tile.coord.firstIndex() + step[0];
@@ -86,8 +88,8 @@ public class King extends ChessPiece {
     @Override
     protected void loadImg() {
         try {
-            whiteImg = ImageIO.read(new File("assets/white_king.png"));
-            blackImg = ImageIO.read(new File("assets/black_king.png"));
+            whiteImg = ImageIO.read(this.getClass().getResource("/assets/white_king.png"));
+            blackImg = ImageIO.read(this.getClass().getResource("/assets/black_king.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

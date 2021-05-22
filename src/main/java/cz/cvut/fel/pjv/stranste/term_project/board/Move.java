@@ -11,7 +11,6 @@ public final class Move implements Serializable {
     public final MoveType type;
 
     /**
-     *
      * @param white true if move was played by white, false otherwise.
      * @param captures true if move captures, false otherwise.
      * @param start coordinate of the start of the move.

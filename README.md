@@ -11,9 +11,9 @@ Term project for course Programming in java: Multiplayer chess simulator
 - support for a PGN format
 
 ## Installation
-Simply put these commands into terminal:
+Simply put these commands in terminal:
 1. git clone *this repository*
-2. cd chess_simulator
+2. cd stranste
 3. mvn clean install
 4. java -jar target/term_project-1.1.jar
 

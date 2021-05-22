@@ -1,8 +1,11 @@
 package cz.cvut.fel.pjv.stranste.term_project.ui;
 
+import cz.cvut.fel.pjv.stranste.term_project.controllers.MainWindowController;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.logging.Logger;
 
 public class Dialog {
 
@@ -13,6 +16,8 @@ public class Dialog {
     public int port;
     public String address;
 
+    private static final Logger LOG = Logger.getLogger(MainWindowController.class.getName());
+
     private Dialog(boolean whiteStarts, boolean whiteLocal, int time, int increment) {
         this.time = time;
         this.increment = increment;
@@ -22,6 +27,7 @@ public class Dialog {
 
     /**
      * Show a dialog to setup a game against bot.
+     * @param view parent view
      */
     public static Dialog showBotDialog(MainWindowView view)
     {
@@ -86,6 +92,7 @@ public class Dialog {
 
     /**
      * Show a dialog to setup a local game.
+     * @param view parent view
      */
     public static Dialog showLocalDialog (MainWindowView view)
     {
@@ -134,6 +141,7 @@ public class Dialog {
 
     /**
      * Show a dialog to setup a lan game.
+     * @param view parent view
      */
     public static Dialog showHostDialog (MainWindowView view)
     {
@@ -211,7 +219,7 @@ public class Dialog {
                 }
                 success = true;
             } catch (NumberFormatException e) {
-                //log wrong port format
+                LOG.info("Wrong port format");
             }
         }
 
@@ -222,6 +230,7 @@ public class Dialog {
 
     /**
      * Show a dialog to join a lan game.
+     * @param view parent view
      */
     public static Dialog showJoinDialog (MainWindowView view)
     {

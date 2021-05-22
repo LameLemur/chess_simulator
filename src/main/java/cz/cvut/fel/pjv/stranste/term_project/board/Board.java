@@ -67,6 +67,8 @@ public class Board implements Serializable {
 
     /**
      * Return a Tile based on a given Coord. Returns null if Tile is empty.
+     * @param coord coordinate of a demanded tile
+     * @return Tile based on a given coord
      */
     public Tile getTile(Coord coord) {
         return tiles[coord.firstIndex()][coord.secondIndex()];
@@ -74,6 +76,9 @@ public class Board implements Serializable {
 
     /**
      * Return a Tile on a certain indexes. Returns null if Tile is empty.
+     * @param firstIndex first index of a chess board as a 2D array
+     * @param secondIndex second index of a chess board as a 2D array
+     * @return Tile based on a given coord
      */
     public Tile getTile(int firstIndex, int secondIndex) {
         return tiles[firstIndex][secondIndex];
@@ -81,6 +86,7 @@ public class Board implements Serializable {
 
     /**
      * Takes a Move and plays it.
+     * @param move move to played
      */
     public void movePiece(Move move) {
         Tile startTile = tiles[move.start.firstIndex()][move.start.secondIndex()];
@@ -143,6 +149,8 @@ public class Board implements Serializable {
 
     /**
      * Places a ChessPiece on a specific Tile based on a given Coord.
+     * @param piece chess piece instance
+     * @param coord coordinate of a tile
      */
     public void setPiece(ChessPiece piece, Coord coord) {
         Tile tile = tiles[coord.firstIndex()][coord.secondIndex()];
@@ -217,10 +225,11 @@ public class Board implements Serializable {
 
     /**
      * Returns true if the Move places the player in check. Returns false if the Move is valid.
+     * @param move
      */
     public boolean checkMoveForChecks(Move move) {
 
-        Coord kingPoss = move.white ? whiteKing.tile.coord : blackKing.tile.coord;
+        Coord kingPoss = move.white ? whiteKing.getTile().coord : blackKing.getTile().coord;
         if (move.start.equals(kingPoss)) {
             kingPoss = move.end;
         }
@@ -319,7 +328,7 @@ public class Board implements Serializable {
         //king
         steps = new int[][]{{1, 0}, {1, 1}, {0, 1}, {1, -1}, {-1, 1}, {-1, 0}, {0, -1}, {-1, -1}};
         if (getTile(move.start).getPiece() instanceof King) {
-            Coord otherKing = !move.white ? whiteKing.tile.coord : blackKing.tile.coord;
+            Coord otherKing = !move.white ? whiteKing.getTile().coord : blackKing.getTile().coord;
             for (int[] step : steps) {
                 int firstIndex = otherKing.firstIndex() + step[0];
                 int secondIndex = otherKing.secondIndex() + step[1];
@@ -334,7 +343,7 @@ public class Board implements Serializable {
     }
 
     /**
-     * returns true if king is in check, returns false otherwise
+     * @return true if king is in check, returns false otherwise
      */
     public boolean kingInCheckMate() {
         if (getLastMove() != null && getLastMove().end.equals(new Coord('a', '1'))) {

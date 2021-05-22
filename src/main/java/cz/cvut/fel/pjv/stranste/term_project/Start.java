@@ -8,7 +8,7 @@ public class Start {
 
     public static void main(String[] args) {
         Board board = new Board();
-        MainWindowController controller = new MainWindowController(board);
+        MainWindowController controller = MainWindowController.getInstance(board);
         MainWindowView view = new MainWindowView(controller);
         controller.init();
     }

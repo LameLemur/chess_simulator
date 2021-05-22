@@ -8,6 +8,8 @@ public class Coord implements Serializable {
 
     /**
      * Creates a Coord with given letter and number.
+     * @param letter chess board coordinate letter
+     * @param number chess board coordinate number
      */
     public Coord(char letter, char number) {
 
@@ -17,6 +19,8 @@ public class Coord implements Serializable {
 
     /**
      * Creates a Coord with given indexes.
+     * @param number first index on board as if chessBoard was a 2D array
+     * @param letter second index on board as if chessBoard was a 2D array
      */
     public Coord(int number, int letter) {
 
@@ -25,28 +29,28 @@ public class Coord implements Serializable {
     }
 
     /**
-     * Returns first index on board as if chessBoard was a 2D array
+     * @return first index on board as if chessBoard was a 2D array
      */
     public int firstIndex() {
         return 56 - ((int) number);
     }
 
     /**
-     * Returns second index on board as if chessBoard was a 2D array
+     * @return second index on board as if chessBoard was a 2D array
      */
     public int secondIndex() {
         return ((int) letter) - 97;
     }
 
     /**
-     * Returns the letter part of a chess coordinate.
+     * @return the letter part of a chess coordinate.
      */
     public char firstCoord() {
         return letter;
     }
 
     /**
-     * Returns the number part of a chess coordinate.
+     * @return the number part of a chess coordinate.
      */
     public char secondCoord() {
         return number;
